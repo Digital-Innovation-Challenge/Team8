@@ -1,7 +1,7 @@
 import random
 import sys
 
-from src.udp import MaexchenUdpClient, MaexchenConnectionError
+from lib.udp import MaexchenUdpClient, MaexchenConnectionError
 
 if __name__ == "__main__":
 
