@@ -9,7 +9,7 @@ class ConservativeStrategyBot(TemplateBot):
 
     # overridden
     def callback_receiver(self, prev_turn):
-        if TemplateBot.exclude_trivialities(self, prev_turn, first_turn=(5, 4)):
+        if super(ConservativeStrategyBot, self).exclude_trivialities(prev_turn, first_turn=(5, 4)):
             return
         value = prev_turn[1]
         if probability_of_value_above(value) < 0.5:
