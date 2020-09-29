@@ -17,10 +17,14 @@ class TemplateBot:
         """Override this method to add functionality to your bot."""
         pass
 
-    def exclude_trivialities(self, prev_turn):
+    def exclude_trivialities(self, prev_turn, first_turn=None):
         if prev_turn is None:
-            roll = self.bot.roll()
-            self.bot.announce(roll)
+            if first_turn is None:
+                roll = self.bot.roll()
+                self.bot.announce(roll)
+            else:
+                self.bot.roll()
+                self.bot.announce(first_turn)
             return True
         elif prev_turn[1] == valid_game_values_lowest_to_highest()[-1]:
             self.bot.accuse()
