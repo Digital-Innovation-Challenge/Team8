@@ -86,14 +86,14 @@ class Round():
 
 
 class GameLogger():
-    def __init__(self, base_save_path, save_interval=100, spectator_name="spectator", rand_name_sufix=True, server_ip="35.159.50.117", server_port=9000, buffer_size=1024):
+    def __init__(self, base_save_path, save_interval=100, spectator_name="spectator", rand_name_suffix=True, server_ip="35.159.50.117", server_port=9000, buffer_size=1024):
         """
         Creates a GameLogger.
 
         :param str base_save_path: Base path of where to save the logs
         :param int save_interval: Saving after each interval
         :param str spectator_name: The name of the spectator.
-        :param bool rand_name_sufix: Add a random suffix to the name. This enables two multiple spectators.
+        :param bool rand_name_suffix: Add a random suffix to the name. This enables two multiple spectators.
         :param str server_ip: IP of the server.
         :param int server_port: Port of the server.
         :param int buffer_size: Size of the Buffer.
