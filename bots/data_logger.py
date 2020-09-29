@@ -138,6 +138,12 @@ class GameLogger():
         print(f"LOG DATA saved to '{self._save_path}'")
 
     def _await_commands(self, cmds):
+        """
+        Waits for one of the given commands. Returns incoming message.
+
+        :param [] cmds: List of commands to wait for
+        :return str: Message
+        """
         while True:
             message = self._udp_client.await_message()
             print(message)
@@ -146,6 +152,9 @@ class GameLogger():
                 return message
 
     def _listen_move(self):
+        """
+        Recursively listens to the game moves until round is finished.
+        """
         message = self._await_commands(["ANNOUNCED", "SCORE"])
         split = message.split(";")
         if split[0] == "SCORE":
