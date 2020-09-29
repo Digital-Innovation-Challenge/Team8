@@ -1,6 +1,8 @@
 #! /usr/bin/env python3
 import sys
 import yaml
+import string
+import random
 import logging
 from pathlib import Path
 from datetime import datetime
@@ -84,12 +86,13 @@ class Round():
 
 
 class GameLogger():
-    def __init__(self, base_save_path, spectator_name="Spectator", server_ip="35.159.50.117", server_port=9000, buffer_size=1024):
+    def __init__(self, base_save_path, spectator_name="spectator", rand_name_sufix=True, server_ip="35.159.50.117", server_port=9000, buffer_size=1024):
         """
         Creates a GameLogger.
 
         :param base_save_path: Base path of where to save the logs
         :param spectator_name: The name of the spectator.
+        :param rand_name_sufix: Add a random suffix to the name. This enables two multiple spectators.
         :param server_ip: IP of the server.
         :param server_port: Port of the server.
         :param buffer_size: Size of the Buffer.
@@ -104,11 +107,11 @@ class GameLogger():
         self._round = None
 
         # Set or generate the bot name
-        if spectator_name:
-            self._spectator_name = spectator_name
+        if rand_name_sufix:
+            self._spectator_name = spectator_name + "x" + \
+                ''.join(random.choice(string.ascii_lowercase) for i in range(3))
         else:
-            self._spectator_name = \
-                ''.join(random.choice(string.ascii_lowercase) for i in range(6))
+            self._spectator_name = spectator_name
 
         self._logger = logging.getLogger(__name__)
         self._logger.setLevel(logging.DEBUG)
