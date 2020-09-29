@@ -11,10 +11,10 @@ accuse_percentage = 0.1
 
 def random_answer(previous_turn):
     accuse = random.random() < accuse_percentage
-    if accuse and previous_turn is not None:
+    all_values = tools.valid_game_values_lowest_to_highest()
+    if previous_turn is not None and (accuse or previous_turn[1] == all_values[-1]):
         bot.accuse()
     else:
-        all_values = tools.valid_game_values_lowest_to_highest()
         if previous_turn is None:
             values_to_choose_from = all_values
         else:
