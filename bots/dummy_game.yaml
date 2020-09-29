@@ -1,16 +1,23 @@
-rounds: [
-  {
-    - round_number: 1,
-    - time: unixtimestamp,
-    - players: [...],
-    - moves: [
-      {
-        - player: "Foo",
-        - truth: [1,2],
-        - announced: [1,2],
-        - lied: False,
-        - accused: False,
-      },
-    ]
-  }
-]
+- moves:
+  - accused: false
+    announced: !!python/tuple
+    - 1
+    - 1
+    lied: null
+    player: rational-python-bot
+    truth: null
+  - accused: true
+    announced: !!python/tuple
+    - 6
+    - 6
+    lied: true
+    player: random-bot
+    truth: !!python/tuple
+    - 3
+    - 2
+  players:
+  - rational-python-bot
+  - random-bot
+  - machine-learning-bot
+  round_number: '51851'
+  time: 2020-09-30 00:05:36.777523
