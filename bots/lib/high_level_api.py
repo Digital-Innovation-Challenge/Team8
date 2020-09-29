@@ -77,7 +77,7 @@ class MaexchenHighLevelBotAPI(object):
             if message.startswith("ROLLED;"):
                 print(message)
                 self._token = message.split(";")[2]
-                dice = tuple(message.split(";")[2].split(","))
+                dice = tuple([int(num) for num in message.split(";")[1].split(",")])
                 return dice
 
     def announce(self, dice):
@@ -108,11 +108,13 @@ class MaexchenHighLevelBotAPI(object):
                 print(message)
                 self._token = message.split(";")[1]
                 self._udp_client.send_message(f"JOIN;{self._token}")
+                self._gameplays = []
 
             if message.startswith("ANNOUNCED"):
                 print(message)
-                name = message.split(";")[1]
-                dice = tuple(message.split(";")[2].split(","))
+                split = message.split(";")
+                name = split[1]
+                dice = tuple([int(num) for num in split[2].split(",")])
                 self._gameplays.append((name, dice))
 
             if message.startswith("YOUR TURN"):

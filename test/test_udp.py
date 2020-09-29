@@ -13,7 +13,7 @@ class TestUdpClient(unittest.TestCase):
     ERROR_MSG = "error"
 
     def setUp(self):
-        with mock.patch("src.udp.socket.socket") as socket_mock:
+        with mock.patch("bots.lib.udp.socket.socket") as socket_mock:
             self.socket_mock = socket_mock
             self.client = MaexchenUdpClient(self.IP, self.PORT)
 
