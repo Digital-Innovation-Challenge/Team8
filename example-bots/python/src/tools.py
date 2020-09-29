@@ -59,6 +59,25 @@ def probability_of_value(value, use_rank=False):
     return 1 / 36 if tuple_value_to_integer(value) % 11 == 0 else 1 / 18
 
 
+def probability_of_value_above(value, use_rank=False):
+    """
+    Gives the probability of rolling a value higher than the given game value.
+
+    :param value: A valid game value as a 2-tuple (or a rank, if use_rank is True)
+    :param use_rank: Set True to input a rank as the main argument instead of a 2-tuple
+    :returns: The probability (between 0 and 1) of a higher value than the given one occurring on any given roll.
+    """
+    # get rank of value
+    if use_rank:
+        rank = value
+    else:
+        rank = value_to_rank(value)
+
+    values = valid_game_values_lowest_to_highest()
+    # sum over all probabilities of higher values
+    return sum(probability_of_value(v) for v in values[rank + 1:])
+
+
 def tuple_value_to_integer(tuple_val):
     """
     Converts a value from its 2-tuple-form to its integer-form, e.g. (2,1) -> 21
