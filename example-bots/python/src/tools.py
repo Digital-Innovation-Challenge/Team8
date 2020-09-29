@@ -56,4 +56,24 @@ def probability_of_value(value, use_rank=False):
     if use_rank:
         value = rank_to_value(value)
 
-    return 1 / 36 if (value[0] * 10 + value[1]) % 11 == 0 else 1 / 18
+    return 1 / 36 if tuple_value_to_integer(value) % 11 == 0 else 1 / 18
+
+
+def tuple_value_to_integer(tuple_val):
+    """
+    Converts a value from its 2-tuple-form to its integer-form, e.g. (2,1) -> 21
+
+    :param tuple_val: The game value as a tuple
+    :return: The game value as an integer
+    """
+    return tuple_val[0] * 10 + tuple_val[1]
+
+
+def int_value_to_tuple(int_val):
+    """
+    Converts a value from its integer-form to its integer form, e.g. 21 -> (2,1)
+
+    :param int_val: The game value as an integer
+    :return: The game value as a tuple
+    """
+    return (int_val % 100) - (int_val % 10), int_val % 10
