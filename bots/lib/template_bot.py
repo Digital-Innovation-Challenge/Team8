@@ -21,8 +21,11 @@ class TemplateBot:
         if prev_turn is None:
             roll = self.bot.roll()
             self.bot.announce(roll)
+            return True
         elif prev_turn[1] == valid_game_values_lowest_to_highest()[-1]:
             self.bot.accuse()
+            return True
+        return False
 
     def run(self):
         self.bot.start()

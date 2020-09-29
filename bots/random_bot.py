@@ -13,7 +13,8 @@ class RandomBot(TemplateBot):
 
     # overridden
     def callback_receiver(self, prev_turn):
-        TemplateBot.exclude_trivialities(prev_turn)
+        if TemplateBot.exclude_trivialities(self, prev_turn):
+            return
 
         accuse = random.random() < accuse_percentage
         if accuse:
