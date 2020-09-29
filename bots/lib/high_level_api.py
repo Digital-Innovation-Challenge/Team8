@@ -72,6 +72,7 @@ class MaexchenHighLevelBotAPI(object):
         """
         Rolls your dice. This is exclusive to the `accuse` function.
         """
+        self._udp_client.send_message(f"ROLL;{self._token}")
         while True:
             message = self._udp_client.await_message()
             if message.startswith("ROLLED;"):
