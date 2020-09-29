@@ -48,9 +48,9 @@ def probability_of_value(value, use_rank=False):
     """
     Gives the probability of rolling the given game value.
 
-    :param value: A valid game value as a 2-tuple
-    :param use_rank: Set True to use a rank not a 2-tuple
-    :returns: The probability of the value occurring on any given roll.
+    :param value: A valid game value as a 2-tuple (or a rank, if use_rank is True)
+    :param use_rank: Set True to input a rank as the main argument instead of a 2-tuple
+    :returns: The probability (between 0 and 1) of the value occurring on any given roll.
     """
     # convert to value if using rank
     if use_rank:
