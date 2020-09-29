@@ -15,7 +15,7 @@ semicolons, or commas and can have up to 20 characters. From then on, the bot wi
 The server will only accept answers within a narrow time frame (250 ms).
 
 ### Join with example bots
-We provide you with two very simple bots written in [Java](example-bots/java/README.md) and [Python](example-bots/python/README.md).
+We provide you with two very simple bots written in [Java](bots/java/README.md) and [Python](bots/README.md).
 How to fire up these bots is described in the respective README.mds. 
 Please note that the code of the example bots is not an example for clean code. 
 Hence, if you want to build upon it, you should better do some refactorings.

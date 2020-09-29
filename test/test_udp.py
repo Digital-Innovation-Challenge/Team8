@@ -2,7 +2,7 @@ import unittest
 
 import mock
 
-from src.udp import MaexchenUdpClient, MaexchenConnectionError
+from bots.lib.udp import MaexchenUdpClient, MaexchenConnectionError
 
 
 class TestUdpClient(unittest.TestCase):

@@ -1,9 +1,10 @@
-import threading
+import logging
 import random
 import string
-import logging
+import threading
 
-from lib.udp import MaexchenUdpClient, MaexchenConnectionError
+from lib.udp import MaexchenUdpClient
+
 
 class MaexchenHighLevelBotAPI(object):
     def __init__(self, bot_name=None, server_ip="35.159.50.117", server_port=9000, buffer_size=1024):
@@ -22,10 +23,10 @@ class MaexchenHighLevelBotAPI(object):
             self._bot_name = bot_name
         else:
             self._bot_name = \
-                ''.join(random.choice(string.ascii_lowercase) for i in range(6))
+                ''.join(random.choice(string.ascii_lowercase) for _ in range(6))
 
         # Placeholders
-        self._callback = lambda: None
+        self._callback = lambda x: None
         self._main_thread = None
         self._stop_main = False
         self._gameplays = []
@@ -101,7 +102,7 @@ class MaexchenHighLevelBotAPI(object):
         """
         while not self._stop_main:
             message = self._udp_client.await_message()
-            
+
             # Join the round
             if message.startswith("ROUND STARTING"):
                 self._logger.debug(message)
