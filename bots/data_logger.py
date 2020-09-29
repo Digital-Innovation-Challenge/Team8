@@ -1,6 +1,8 @@
 #! /usr/bin/env python3
+import sys
 import yaml
 import logging
+from pathlib import Path
 from datetime import datetime
 from lib.udp import MaexchenUdpClient, MaexchenConnectionError
 
@@ -82,16 +84,17 @@ class Round():
 
 
 class GameLogger():
-    def __init__(self, save_path, spectator_name="Spectator", server_ip="35.159.50.117", server_port=9000, buffer_size=1024):
+    def __init__(self, base_save_path, spectator_name="Spectator", server_ip="35.159.50.117", server_port=9000, buffer_size=1024):
         """
         Creates a GameLogger.
 
+        :param base_save_path: Base path of where to save the logs
         :param spectator_name: The name of the spectator.
         :param server_ip: IP of the server.
         :param server_port: Port of the server.
         :param buffer_size: Size of the Buffer.
         """
-        self._save_path = save_path
+        self._save_path = Path(base_save_path) / Path("mia_" + datetime.now().strftime("%d-%m-%Y_%H:%M:%S") + ".yaml")
         with open(self._save_path, 'w') as save_file:
                     yaml.dump([], save_file)
 
@@ -191,4 +194,4 @@ class GameLogger():
                 exit(0)
 
 if __name__ == "__main__":
-    GameLogger("/tmp/mia.yaml", "SpectatorTeam8")
+    GameLogger(sys.argv[1], "SpectatorTeam8")
