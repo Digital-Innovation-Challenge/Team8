@@ -13,11 +13,13 @@ class RandomBot(TemplateBot):
 
     # overridden
     def callback_receiver(self, prev_turn):
+        TemplateBot.exclude_trivialities(prev_turn)
+
         accuse = random.random() < accuse_percentage
-        all_values = tools.valid_game_values_lowest_to_highest()
-        if prev_turn is not None and (accuse or prev_turn[1] == all_values[-1]):
+        if accuse:
             self.bot.accuse()
         else:
+            all_values = tools.valid_game_values_lowest_to_highest()
             if prev_turn is None:
                 values_to_choose_from = all_values
             else:
