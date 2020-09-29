@@ -120,4 +120,7 @@ class MaexchenHighLevelBotAPI(object):
             if message.startswith("YOUR TURN"):
                 print(message)
                 self._token = message.split(";")[1]
-                self._callback(self._gameplays[-1])
+                if self._gameplays:
+                    self._callback(self._gameplays[-1])
+                else:
+                    self._callback(None)
