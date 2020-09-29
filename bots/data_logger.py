@@ -3,36 +3,72 @@ import yaml
 from datetime import datetime
 from lib.udp import MaexchenUdpClient, MaexchenConnectionError
 
-"""
 class Move():
-    def __init__(self, )
-"""
+    def __init__(self):
+        self._truth = None
+        self._announced = None
+        self._lied = None
+        self._accused = None
 
+    def set_truth(self, truth):
+        self._truth = truth
 
-class Round():
-    def __init__(self, idx, players):
-        self._id = idx
-        self._time = datetime.now()
-        self._players = players
-        self._moves = []
+    def set_announced(self, announced):
+        self._announced = announced
 
-    def add_move(self, truth, announced, lied, accused):
-        self._moves.append({
+    def set_lied(self, lied):
+        self._lied = lied
+
+    def set_accused(self, accused):
+        self._accused = accused
+
+    def get_truth(self):
+        return self._truth
+
+    def get_announced(self):
+        return self._announced
+
+    def get_lied(self):
+        return self._lied
+
+    def get_accused(self):
+        return self._accused
+
+    def serialize(self):
+        return {
             "truth": truth,
             "announced": announced,
             "lied": lied,
             "accused": accused,
-        })
+        }
 
-    def get_moves(self):
-        return self._moves
+
+class Round():
+    def __init__(self, idx, players):
+        self._idx = idx
+        self._time = datetime.now()
+        self._players = players
+        self._moves = []
+
+    def add_move(self, move):
+        self._moves.append(move)
+
+    def get_idx(self):
+        return self._idx
+
+    def get_time(self):
+        return self._time
 
     def get_players(self)
         return self._players
 
+    def get_moves(self):
+        return self._moves
+
     def serialize(self):
+        moves = [move.serialize() for move in self._moves]
         return {
-            "round_number": idx,
+            "round_number": self._idx,
             "time": self._time,
             "players": self._players,
             "moves": self._moves,
@@ -53,15 +89,15 @@ class GameLogger():
 
         self._udp_client = MaexchenUdpClient()
 
+        # Placeholders
+        self._round = None
+
         # Set or generate the bot name
         if spectator_name:
             self._spectator_name = spectator_name
         else:
             self._spectator_name = \
                 ''.join(random.choice(string.ascii_lowercase) for i in range(6))
-
-        # Placeholders
-        self._rounds = []
 
         self._logger = logging.getLogger(__name__)
         self._logger.setLevel(logging.DEBUG)
@@ -78,9 +114,6 @@ class GameLogger():
         """
         Closes the Bots connection.
         """
-        self._stop_main = True
-        self._main_thread.join()
-        self._stop_main = False
         self._udp_client.send_message("UNREGISTER")
         self._udp_client.close()
 
@@ -106,10 +139,10 @@ class GameLogger():
             message = self._await_commands(["ANNOUNCED"])
             announced = tuple(message.split(";")[2].split(","))
             lied = truth != announced
-            self._rounds[-1].add_move(truth, announced, lied, False)
+            self._round].add_move(truth, announced, lied, False)
             self._listen_move()
         elif cmd == "SEE":
-            moves = self._rounds[-1].get_moves()
+            moves = self._round.get_moves()
             if len(moves) > 0:
                 moves[-1]["accused"] = True
 
@@ -122,7 +155,7 @@ class GameLogger():
             self._logger.debug(message)
             idx = message.split(";")[1]
             players = message.split(";")[2].split(",")
-            self._rounds.append(Round(idx, players))
+            self._round = Round(idx, players)
             current_player_counter = 0
 
             self._listen_move()
@@ -131,7 +164,7 @@ class GameLogger():
                 self._logger.debug(message)
 
                 if len(self._rounds) > 0:
-                    round_data = self._rounds[-1].serialize()
+                    round_data = self._round.serialize()
                     data = yaml.load(self.save_file)
                     data["rounds"].append(round_data)
                     yaml.dump(data, self._save_file)
