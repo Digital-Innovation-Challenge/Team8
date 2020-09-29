@@ -62,7 +62,7 @@ class MaexchenHighLevelBotAPI(object):
         while True:
             message = self._udp_client.await_message()
             if message.startswith("PLAYER LOST;"):
-                self._logger.debug(message)
+                print(message)
                 if message.endswith("CAUGHT_BLUFFING"):
                     return True
                 if message.endswith("SEE_FAILED"):
@@ -75,7 +75,7 @@ class MaexchenHighLevelBotAPI(object):
         while True:
             message = self._udp_client.await_message()
             if message.startswith("ROLLED;"):
-                self._logger.debug(message)
+                print(message)
                 self._token = message.split(";")[2]
                 dice = tuple(message.split(";")[2].split(","))
                 return dice
@@ -105,17 +105,17 @@ class MaexchenHighLevelBotAPI(object):
 
             # Join the round
             if message.startswith("ROUND STARTING"):
-                self._logger.debug(message)
+                print(message)
                 self._token = message.split(";")[1]
                 self._udp_client.send_message(f"JOIN;{self._token}")
 
             if message.startswith("ANNOUNCED"):
-                self._logger.debug(message)
+                print(message)
                 name = message.split(";")[1]
                 dice = tuple(message.split(";")[2].split(","))
                 self._gameplays.append((name, dice))
 
             if message.startswith("YOUR TURN"):
-                self._logger.debug(message)
+                print(message)
                 self._token = message.split(";")[1]
                 self._callback(self._gameplays[-1])
