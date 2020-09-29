@@ -6,10 +6,12 @@ import lib.tools as tools
 from lib.high_level_api import MaexchenHighLevelBotAPI
 from time import sleep
 
+accuse_percentage = 0.1
+
 
 def random_answer(previous_turn):
-    rand = random.randint(0, 1)
-    if rand and previous_turn is not None:
+    accuse = random.random() < accuse_percentage
+    if accuse and previous_turn is not None:
         bot.accuse()
     else:
         all_values = tools.valid_game_values_lowest_to_highest()
