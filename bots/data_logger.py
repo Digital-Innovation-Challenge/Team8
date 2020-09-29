@@ -147,7 +147,6 @@ class GameLogger():
 
     def _listen_move(self):
         message = self._await_commands(["ANNOUNCED", "SCORE"])
-        print(message)
         split = message.split(";")
         if split[0] == "SCORE":
             return
@@ -177,7 +176,6 @@ class GameLogger():
         while True:
             try:
                 message = self._await_commands(["ROUND STARTED"])  # Round started
-                print(message)
                 idx = message.split(";")[1]
                 players = message.split(";")[2].split(",")
                 self._round = Round(idx, players)
