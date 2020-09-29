@@ -40,24 +40,28 @@ class MaexchenHighLevelBotAPI(object):
         Start the game for your bot (non blocking).
         It joins the game on the next possibility.
         """
+        print("--- Starting")
         self._udp_client.send_message(f"REGISTER;{self._bot_name}")
         self._stop_main = False
         self._main_thread = threading.Thread(target=self._main_loop, args=())
         self._main_thread.start()
+        print("--- Started")
 
     def register_callback(self, func):
         """ 
         Register a callback function which is called when its your turn.
         The callback function is called with a tuple of both claimed dice values.
         """
+        print("--- Registering callback for bot " + self._bot_name + " to function " + str(func))
         self._callback = func
 
     def accuse(self):
         """ 
-        Accuse the person before of liying.
+        Accuse the person before of lying.
         Return if the judgment was wright or wrong.
         This is exclusive to the `roll` function.
         """
+        print("--- Accusing")
         self._udp_client.send_message(f"SEE;{self._token}")
         while True:
             message = self._udp_client.await_message()
@@ -72,6 +76,7 @@ class MaexchenHighLevelBotAPI(object):
         """
         Rolls your dice. This is exclusive to the `accuse` function.
         """
+        print("--- Rolling")
         self._udp_client.send_message(f"ROLL;{self._token}")
         while True:
             message = self._udp_client.await_message()
@@ -85,12 +90,14 @@ class MaexchenHighLevelBotAPI(object):
         """
         Announses a dice roll or lie.
         """
+        print("--- Announcing " + str(dice))
         self._udp_client.send_message(f"JOIN;{dice[0]}, {dice[1]};{self._token}")
 
     def close(self):
         """
         Closes the Bots connection.
         """
+        print("--- Closing")
         self._stop_main = True
         self._main_thread.join()
         self._stop_main = False
