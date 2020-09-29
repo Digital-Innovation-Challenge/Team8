@@ -108,6 +108,7 @@ class MaexchenHighLevelBotAPI(object):
                 print(message)
                 self._token = message.split(";")[1]
                 self._udp_client.send_message(f"JOIN;{self._token}")
+                self._gameplays = []
 
             if message.startswith("ANNOUNCED"):
                 print(message)
