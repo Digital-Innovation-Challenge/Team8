@@ -8,8 +8,8 @@ class Move():
     def __init__(self):
         self._truth = None
         self._announced = None
-        self._lied = None
-        self._accused = None
+        self._accused = False
+        self._player = None
 
     def set_truth(self, truth):
         self._truth = truth
@@ -17,11 +17,11 @@ class Move():
     def set_announced(self, announced):
         self._announced = announced
 
-    def set_lied(self, lied):
-        self._lied = lied
-
     def set_accused(self, accused):
         self._accused = accused
+
+    def set_player(self, players):
+        self._player = players
 
     def get_truth(self):
         return self._truth
@@ -29,18 +29,23 @@ class Move():
     def get_announced(self):
         return self._announced
 
-    def get_lied(self):
-        return self._lied
-
     def get_accused(self):
         return self._accused
 
+    def get_player(self):
+        return self._player
+
+    def get_lied(self):
+        if self.get_truth() is not None and self.get_announced() is not None:
+            return self.get_truth() != self.get_announced()
+
     def serialize(self):
         return {
-            "truth": truth,
-            "announced": announced,
-            "lied": lied,
-            "accused": accused,
+            "truth": self.get_truth(),
+            "announced": self.get_announced(),
+            "lied": self.get_lied(),
+            "accused": self.get_accused(),
+            "player": self.get_player(),
         }
 
 
@@ -67,12 +72,12 @@ class Round():
         return self._moves
 
     def serialize(self):
-        moves = [move.serialize() for move in self._moves]
+        moves = [move.serialize() for move in self.get_moves()]
         return {
-            "round_number": self._idx,
-            "time": self._time,
-            "players": self._players,
-            "moves": self._moves,
+            "round_number": self.get_idx(),
+            "time": self.get_time(),
+            "players": self.get_players(),
+            "moves": moves,
         }
 
 
@@ -87,7 +92,8 @@ class GameLogger():
         :param buffer_size: Size of the Buffer.
         """
         self._save_path = save_path
-        self._save_file = open(save_path, 'w')
+        with open(self._save_path, 'w') as save_file:
+                    yaml.dump([], save_file)
 
         self._udp_client = MaexchenUdpClient()
 
@@ -128,31 +134,35 @@ class GameLogger():
     def _await_commands(self, cmds):
         while True:
             message = self._udp_client.await_message()
+            print(message)
             start = message.split(";")[0]
             if start in cmds:
                 return message
 
     def _listen_move(self):
-        message = self._await_commands(["YOUR TURN"])
-        print(message)
-        player = players[current_player_counter]
-        current_player_counter = (current_player_counter + 1) % len(players)
-
-        message = self._await_commands(["ROLLED", "SEE"])
+        message = self._await_commands(["ANNOUNCED", "SCORE"])
         print(message)
         split = message.split(";")
+        if split[0] == "SCORE":
+            return
+        move = Move()
+        self._round.add_move(move)
+        players = self._round.get_players()
+        move.set_player(players[self._current_player_counter])
+        move.set_announced(tuple([int(i) for i in split[2].split(",")]))
+        self._current_player_counter = (self._current_player_counter + 1) % len(players)
+
+        message = self._await_commands(["ACTUAL DICE", "PLAYER ROLLS", "SCORE"])
+        split = message.split(";")
         cmd = split[0]
-        if cmd == "ROLLED":
-            truth = tuple(split[1].split(","))
-            message = self._await_commands(["ANNOUNCED"])
-            announced = tuple(message.split(";")[2].split(","))
-            lied = truth != announced
-            self._round.add_move(truth, announced, lied, False)
+        if cmd == "SCORE":
+            return
+        elif cmd == "ACTUAL DICE":
+            move.set_accused(True)
+            move.set_truth(tuple([int(i) for i in split[1].split(",")]))
+
+        elif cmd == "PLAYER ROLLS":
             self._listen_move()
-        elif cmd == "SEE":
-            moves = self._round.get_moves()
-            if len(moves) > 0:
-                moves[-1]["accused"] = True
 
     def _main_loop(self):
         """
@@ -165,22 +175,20 @@ class GameLogger():
                 idx = message.split(";")[1]
                 players = message.split(";")[2].split(",")
                 self._round = Round(idx, players)
-                current_player_counter = 0
+                self._current_player_counter = 0
 
                 self._listen_move()
 
-                if message.startswith("SCORE"):  # Round has ended
-                    print(message)
-
-                    if len(self._rounds) > 0:
-                        round_data = self._round.serialize()
-                        data = yaml.load(self._save_file)
-                        data["rounds"].append(round_data)
-                        yaml.dump(data, self._save_file)
+                # Round has ended
+                round_data = self._round.serialize()
+                with open(self._save_path, 'r') as load_file:
+                    data = yaml.full_load(load_file)
+                data.append(round_data)
+                with open(self._save_path, 'w') as save_file:
+                    yaml.dump(data, save_file)
             except KeyboardInterrupt:
-                self.close
+                self.close()
                 exit(0)
-
 
 if __name__ == "__main__":
     GameLogger("/tmp/mia.yaml", "SpectatorTeam8")
