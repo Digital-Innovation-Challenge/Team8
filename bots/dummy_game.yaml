@@ -1,0 +1,16 @@
+rounds: [
+  {
+    - round_number: 1,
+    - time: unixtimestamp,
+    - players: [...],
+    - moves: [
+      {
+        - player: "Foo",
+        - truth: [1,2],
+        - announced: [1,2],
+        - lied: False,
+        - accused: False,
+      },
+    ]
+  }
+]
