@@ -42,8 +42,8 @@ poetry run <command>
 
 Such commands include
 
-- `python3 bla.py` to run the bla bot
-- `python3 bla.py` to run the bla bot
+- `python3 bla.py` to run the bla bot TODO
+- `python3 bla.py` to run the bla bot TODO
 
 
 ## Technical Infrastructure
@@ -61,4 +61,5 @@ This resulted in huge datasets that we used for our machine learning approach.
 
 
 ## Machine learning
-We
+We used a machine leraning model which we created from scratch using [sklearn](https://scikit-learn.org/stable/) and our recorded dataset to predict if the predcessor lies. This worked verry well with an accurency over 0.88 on the test data set (1/3 the size).
+The Dataset contains over played 100k rounds. The parts where a player accoused another one where used to train the lie detection.  
