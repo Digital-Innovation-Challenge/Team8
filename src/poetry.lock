@@ -70,8 +70,9 @@ python-versions = ">=3.5"
 version = "2.1.0"
 
 [metadata]
-content-hash = "f329b5eefeeb0bb78fb89d690fefab385bc649580897c58c91741267bdf7b671"
-python-versions = "^3.8"
+content-hash = "f66b86c4baef2b2a205c4853499fb0d3fb88da4708e200917ab2a6d191d739db"
+lock-version = "1.0"
+python-versions = "^3.7"
 
 [metadata.files]
 joblib = [
