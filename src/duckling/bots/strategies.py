@@ -152,3 +152,21 @@ class BinomialDistributionMLStrategy(AbstractMLStrategy):
             n = 21 - prev_rank
             top_by = binomial(n, self.p)
             return tools.rank_to_value(prev_rank + top_by)
+
+
+class WeightedDistributionMLStrategy(AbstractMLStrategy):
+    def __init__(self, *args, **kwargs):
+        super(WeightedDistributionMLStrategy, self).__init__(*args[1:], **kwargs)
+
+    def announce_first_turn(self, our_roll):
+        return our_roll
+
+    def announce_later_turn(self, prev_turns, our_roll):
+        our_rank = tools.value_to_rank(our_roll)
+        prev_rank = tools.value_to_rank(prev_turns[-1][1])
+        if our_rank > prev_rank:
+            return our_roll
+        else:
+            higher_values = tools.valid_game_values_lowest_to_highest()[prev_rank + 1:]
+            weights = [tools.probability_of_value(value) for value in higher_values]
+            return random.choices(higher_values, weights=weights)[0]
