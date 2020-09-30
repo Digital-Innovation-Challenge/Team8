@@ -1,6 +1,10 @@
+#! /usr/bin/env python3
+import sys
 import yaml
+import pickle
 import numpy as np
 
+from datetime import datetime
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
 from duckling.lib.tools import *
@@ -9,7 +13,7 @@ data = None
 X = [] 
 Y = [] 
 
-with open("/home/florian/Projekt/Team8/machine-learning/lie-detctor/mia_30-09-2020_01_26_21.yaml", 'r') as load_file:
+with open(sys.argv[1], 'r') as load_file:
     data = yaml.full_load(load_file)
 
 # Person -1
@@ -98,7 +102,10 @@ mlp = MLPClassifier(**params) # design your network
 
 # Yes, it is still that easy to train a network
 mlp.fit(X_train, Y_train)
-print("Training set score: %f" % mlp.score(X_train, Y_train))
-print("Test set score: %f" % mlp.score(X_test, Y_test))
-print(false_label/len(Y))
 
+print(f"Training set score: {mlp.score(X_train, Y_train)}")
+print(f"Test set score: {mlp.score(X_test, Y_test)}")
+print(f"Number of {false_label/len(Y)}")
+
+with open(f"model_{datetime.now().strftime('%d_%m_%Y_%H_%M_%S') }.pickle", "wb") as handle:
+    pickle.dump(mlp, handle)

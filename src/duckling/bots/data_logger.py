@@ -107,7 +107,7 @@ class GameLogger():
         self._udp_client = MaexchenUdpClient()
 
         # Set or generate the bot name
-        if rand_name_sufix:
+        if rand_name_suffix:
             self._spectator_name = spectator_name + "x" + \
                 ''.join(random.choice(string.ascii_lowercase) for i in range(3))
         else:
