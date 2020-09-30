@@ -68,4 +68,5 @@ class InferenceEngine(object):
 
 
 if __name__ == "__main__":
-    InferenceEngine("a")
+    infe = InferenceEngine("model_30_09_2020_12_40_14")
+    print(infe.inference({ 'val': (6,6), 'val_pre': (2,2)}), "{ 'val': (6,6), 'val_pre': (2,2)}")
