@@ -8,7 +8,7 @@
     Bots for the game "Mäxchen" aka Mia.
     <br />
     <br />
-    <a href="https://lecture2gether.eu">View Demo</a> <!--TODO DEMO VERLINKEN-->
+    <a href=https://streamable.com/elac1d>View Video</a> <!--TODO DEMO VERLINKEN-->
   </p>
 </p>
 
