@@ -91,7 +91,7 @@ class MaexchenHighLevelBotAPI(object):
         Announses a dice roll or lie.
         """
         print("--- Announcing " + str(dice))
-        self._udp_client.send_message(f"JOIN;{dice[0]}, {dice[1]};{self._token}")
+        self._udp_client.send_message(f"ANNOUNCE;{dice[0]}, {dice[1]};{self._token}")
 
     def get_announced(self):
         """
@@ -118,23 +118,23 @@ class MaexchenHighLevelBotAPI(object):
         """
         while not self._stop_main:
             message = self._udp_client.await_message()
-
+            print(message)
             # Join the round
             if message.startswith("ROUND STARTING"):
-                print(message)
+                #print(message)
                 self._token = message.split(";")[1]
                 self._udp_client.send_message(f"JOIN;{self._token}")
                 self._gameplays = []
 
             if message.startswith("ANNOUNCED"):
-                print(message)
+                #print(message)
                 split = message.split(";")
                 name = split[1]
                 dice = tuple([int(num) for num in split[2].split(",")])
                 self._gameplays.append((name, dice))
 
             if message.startswith("YOUR TURN"):
-                print(message)
+                #print(message)
                 self._token = message.split(";")[1]
                 if self._gameplays:
                     self._callback(self._gameplays[-1])
