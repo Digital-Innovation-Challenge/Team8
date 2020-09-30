@@ -71,7 +71,7 @@ for game in data:
 
             #print(f"{rank:.2f}, {prob:.2f}, {prob_above:.2f}, {rank_pre:.2f}, {prob_pre:.2f}, {prob_above_pre:.2f}, {label}")
 
-            X.append([rank, prob, prob_above, rank_pre, prob_pre, prob_above_pre])
+            X.append([rank, prob, prob_above, rank_pre, prob_pre, prob_above_pre, deveriation, position])
             Y.append(label)
 
 

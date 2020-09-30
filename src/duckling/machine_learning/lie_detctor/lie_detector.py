@@ -13,7 +13,7 @@ class InferenceEngine(object):
         :param model: Name of the model
         :param version: Version of the model architecture
         """
-        self.model_version = 0
+        self.model_version = version
         self._policy = None
         if model is not None:
             model_folder = (pathlib.Path(__file__).parent / pathlib.Path(model + ".pickle")).absolute()
@@ -33,8 +33,11 @@ class InferenceEngine(object):
         :param data: 
             Version 0:
                 A dict containing the value tuples of the previous players name 'val' and 'val_pre'
+            Version 1:
+                A dict containing the value tuples of the previous players name 'val' and 'val_pre'
+                and the number of plays done this round as 'position'
         :return: 
-            Version 0:
+            Version 0,1:
                 The lie estimation as a boolean
         """
         if self.model_version == 0:
@@ -59,7 +62,42 @@ class InferenceEngine(object):
             # Exec the network
             data = [rank, prob, prob_above, rank_pre, prob_pre, prob_above_pre]
             output = self._policy.predict([data])[0]
-            if output[0] > 0.5:
+            print(output)
+            if output[0] < 0.5:
+                return True
+            else:
+                return False
+        if self.model_version == 1:
+            # Generate and normalize classifyer inputs
+
+            # Person n -1
+            val = data['val']
+            rank = float(1 + value_to_rank(val)) / 21
+            prob = probability_of_value(val)
+            prob_above = probability_of_value_above(val)
+            # Person n - 2
+            if 'val_pre' in data:
+                val_pre = data['val_pre']
+                rank_pre = float(1 + value_to_rank(val_pre)) / 22
+                prob_pre = probability_of_value(val_pre)
+                prob_above_pre = probability_of_value_above(val_pre)
+            else:
+                rank_pre = 0.0
+                prob_pre = 0.0
+                prob_above_pre = 1.0
+
+            # Deveriation
+            deveriation = rank - rank_pre
+
+            # Position
+            position = float(data['position']) / 21
+
+            # Exec the network
+            data = [rank, prob, prob_above, rank_pre, prob_pre, prob_above_pre, deveriation, position]
+            print(data)
+            output = self._policy.predict([data])[0]
+            print(output)
+            if output[0] < 0.5:
                 return True
             else:
                 return False
