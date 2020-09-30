@@ -59,6 +59,18 @@ This resulted in huge datasets that we used for our machine learning approach.
 
 ## Bots
 
+#### Aggressive
+- Never accuse except when the previous bot announced 21
+- Always announce the maximum of 54, our roll, 
+### Weighted Distribution ML
+- Use machine learning to determine whether to accuse or not
+- If roll is higher than previous, say the truth
+- Else choose a random value higher than the previous roll weighted by their probability
+### Binomial Distribution ML
+- Use machine learning to determine whether to accuse or not
+- If roll is higher than previous, say the truth
+- Else choose a random value higher than the previous roll based on a binomial distribution
+
 
 ## Machine learning
 We used a machine learning model which we created from scratch using [sklearn](https://scikit-learn.org/stable/) and our recorded dataset to predict if the predecessor lies. This worked very well with an accuracy over 0.88 on the test data set (1/3 the size).
