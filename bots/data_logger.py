@@ -86,25 +86,25 @@ class Round():
 
 
 class GameLogger():
-    def __init__(self, base_save_path, spectator_name="spectator", rand_name_sufix=True, server_ip="35.159.50.117", server_port=9000, buffer_size=1024):
+    def __init__(self, base_save_path, save_interval=100, spectator_name="spectator", rand_name_suffix=True, server_ip="35.159.50.117", server_port=9000, buffer_size=1024):
         """
         Creates a GameLogger.
 
-        :param base_save_path: Base path of where to save the logs
-        :param spectator_name: The name of the spectator.
-        :param rand_name_sufix: Add a random suffix to the name. This enables two multiple spectators.
-        :param server_ip: IP of the server.
-        :param server_port: Port of the server.
-        :param buffer_size: Size of the Buffer.
+        :param str base_save_path: Base path of where to save the logs
+        :param int save_interval: Saving after each interval
+        :param str spectator_name: The name of the spectator.
+        :param bool rand_name_suffix: Add a random suffix to the name. This enables two multiple spectators.
+        :param str server_ip: IP of the server.
+        :param int server_port: Port of the server.
+        :param int buffer_size: Size of the Buffer.
         """
         self._save_path = Path(base_save_path) / Path("mia_" + datetime.now().strftime("%d-%m-%Y_%H:%M:%S") + ".yaml")
-        with open(self._save_path, 'w') as save_file:
-                    yaml.dump([], save_file)
-
-        self._udp_client = MaexchenUdpClient()
+        self._save_interval = save_interval
 
         # Placeholders
-        self._round = None
+        self._rounds = []
+
+        self._udp_client = MaexchenUdpClient()
 
         # Set or generate the bot name
         if rand_name_sufix:
@@ -135,9 +135,37 @@ class GameLogger():
         self._udp_client.send_message("UNREGISTER")
         self._udp_client.close()
         print("CONNECTION CLOSED")
+        self._save_data()
         print(f"LOG DATA saved to '{self._save_path}'")
 
+    def _main_loop(self):
+            """
+            Runs the main loop which listens for messages from the server.
+            """
+            round_count = 0  # Used for save interval
+            while True:
+                try:
+                    message = self._await_commands(["ROUND STARTED"])  # Round started
+                    idx = message.split(";")[1]
+                    players = message.split(";")[2].split(",")
+                    self._rounds.append(Round(idx, players))
+                    self._current_player_counter = 0
+                    self._listen_move()
+                    if round_count % self._save_interval == 0:
+                        self._save_data()
+                    round_count += 1
+
+                except KeyboardInterrupt:
+                    self.close()
+                    exit(0)
+
     def _await_commands(self, cmds):
+        """
+        Waits for one of the given commands. Returns incoming message.
+
+        :param [] cmds: List of commands to wait for
+        :return str: Message
+        """
         while True:
             message = self._udp_client.await_message()
             print(message)
@@ -146,14 +174,16 @@ class GameLogger():
                 return message
 
     def _listen_move(self):
+        """
+        Recursively listens to the game moves until round is finished.
+        """
         message = self._await_commands(["ANNOUNCED", "SCORE"])
-        print(message)
         split = message.split(";")
         if split[0] == "SCORE":
             return
         move = Move()
-        self._round.add_move(move)
-        players = self._round.get_players()
+        self._rounds[-1].add_move(move)
+        players = self._rounds[-1].get_players()
         move.set_player(players[self._current_player_counter])
         move.set_announced(tuple([int(i) for i in split[2].split(",")]))
         self._current_player_counter = (self._current_player_counter + 1) % len(players)
@@ -170,31 +200,12 @@ class GameLogger():
         elif cmd == "PLAYER ROLLS":
             self._listen_move()
 
-    def _main_loop(self):
-        """
-        Runs the main loop which listens for messages from the server.
-        """
-        while True:
-            try:
-                message = self._await_commands(["ROUND STARTED"])  # Round started
-                print(message)
-                idx = message.split(";")[1]
-                players = message.split(";")[2].split(",")
-                self._round = Round(idx, players)
-                self._current_player_counter = 0
+    def _save_data(self):
+        print("Saving data...")
+        data = [r.serialize() for r in self._rounds]
+        with open(self._save_path, 'w') as save_file:
+            yaml.dump(data, save_file)
 
-                self._listen_move()
-
-                # Round has ended
-                round_data = self._round.serialize()
-                with open(self._save_path, 'r') as load_file:
-                    data = yaml.full_load(load_file)
-                data.append(round_data)
-                with open(self._save_path, 'w') as save_file:
-                    yaml.dump(data, save_file)
-            except KeyboardInterrupt:
-                self.close()
-                exit(0)
 
 if __name__ == "__main__":
-    GameLogger(sys.argv[1], "SpectatorTeam8")
+    GameLogger(sys.argv[1], spectator_name="SpectatorTeam8")

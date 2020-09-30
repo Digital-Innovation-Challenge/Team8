@@ -1,4 +1,5 @@
 from lib.high_level_api import MaexchenHighLevelBotAPI
+from lib.tools import valid_game_values_lowest_to_highest
 from time import sleep
 
 
@@ -15,6 +16,20 @@ class TemplateBot:
     def callback_receiver(self, prev_turn):
         """Override this method to add functionality to your bot."""
         pass
+
+    def exclude_trivialities(self, prev_turn, first_turn=None):
+        if prev_turn is None:
+            if first_turn is None:
+                roll = self.bot.roll()
+                self.bot.announce(roll)
+            else:
+                self.bot.roll()
+                self.bot.announce(first_turn)
+            return True
+        elif prev_turn[1] == valid_game_values_lowest_to_highest()[-1]:
+            self.bot.accuse()
+            return True
+        return False
 
     def run(self):
         self.bot.start()
