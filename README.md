@@ -49,17 +49,17 @@ Such commands include
 ## Technical Infrastructure
 The game runs on a remote server (IP: `35.159.50.117`, port: `9000`). 
 The players communicate with the server using text-based protocol over UDP (using UTF-8 encoded strings)
-We wrapped this protocoll to a high level python api.
+We wrapped this protocol to a high level python api.
 
-We also introduced a object oriented hirachy which allowed us to combine multiple startegies and abstarct the server communication on multiple levels. 
-Allowing methods like our machine learing based lie detection.
+We also introduced an object oriented hierarchy which allowed us to combine multiple strategies and abstract the server communication on multiple levels. 
+Allowing methods like our machine learning based lie detection.
 
-We also added some tools (TODO LINK) to listen to the game traffic, parse it and save them in a strucktured format. 
+We also added some tools (TODO LINK) to listen to the game traffic, parse it and save them in a structured format. 
 This resulted in huge datasets that we used for our machine learning approach.
 
 ## Bots
 
 
 ## Machine learning
-We used a machine leraning model which we created from scratch using [sklearn](https://scikit-learn.org/stable/) and our recorded dataset to predict if the predcessor lies. This worked verry well with an accurency over 0.88 on the test data set (1/3 the size).
-The Dataset contains over 100k played rounds. Only game-moves where a player accoused another one where used to train the lie detection.  
+We used a machine learning model which we created from scratch using [sklearn](https://scikit-learn.org/stable/) and our recorded dataset to predict if the predecessor lies. This worked very well with an accuracy over 0.88 on the test data set (1/3 the size).
+The Dataset contains over 100k played rounds. Only game-moves where a player accused another one where used to train the lie detection.  
