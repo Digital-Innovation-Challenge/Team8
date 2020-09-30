@@ -2,7 +2,7 @@ import unittest
 
 import mock
 
-from bots.lib.udp import MaexchenUdpClient, MaexchenConnectionError
+from duckling.bots.lib.udp import MaexchenUdpClient, MaexchenConnectionError
 
 
 class TestUdpClient(unittest.TestCase):

@@ -1,7 +1,7 @@
 import random
 
-import lib.tools as tools
-from lib.template_bot import TemplateBot
+import duckling.lib.tools as tools
+from duckling.bots.template_bot import TemplateBot
 
 accuse_percentage = 0.1
 

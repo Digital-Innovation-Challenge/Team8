@@ -6,7 +6,7 @@ import random
 import logging
 from pathlib import Path
 from datetime import datetime
-from lib.udp import MaexchenUdpClient, MaexchenConnectionError
+from duckling.lib.udp import MaexchenUdpClient, MaexchenConnectionError
 
 class Move():
     def __init__(self):

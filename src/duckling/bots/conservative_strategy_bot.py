@@ -1,5 +1,5 @@
-from lib.template_bot import TemplateBot
-from lib.tools import probability_of_value_above, higher_than, rank_to_value, value_to_rank
+from duckling.bots.template_bot import TemplateBot
+from duckling.lib.tools import probability_of_value_above, higher_than, rank_to_value, value_to_rank
 
 
 class ConservativeStrategyBot(TemplateBot):

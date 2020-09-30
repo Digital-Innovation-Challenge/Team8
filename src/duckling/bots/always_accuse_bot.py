@@ -1,4 +1,4 @@
-from lib.template_bot import TemplateBot
+from duckling.bots.template_bot import TemplateBot
 
 
 class AlwaysAccuseBot(TemplateBot):

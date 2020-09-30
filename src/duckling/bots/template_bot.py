@@ -1,6 +1,6 @@
-from lib.high_level_api import MaexchenHighLevelBotAPI
-from lib.tools import valid_game_values_lowest_to_highest
 from time import sleep
+from duckling.lib.high_level_api import MaexchenHighLevelBotAPI
+from duckling.lib.tools import valid_game_values_lowest_to_highest
 
 
 class TemplateBot:

@@ -3,7 +3,7 @@ import random
 import string
 import threading
 
-from lib.udp import MaexchenUdpClient
+from duckling.lib.udp import MaexchenUdpClient
 
 
 class MaexchenHighLevelBotAPI(object):
