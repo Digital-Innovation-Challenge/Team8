@@ -70,7 +70,7 @@ python-versions = ">=3.5"
 version = "2.1.0"
 
 [metadata]
-content-hash = "00ed93c1d42567078da06315caa81aa62aa6ea97c63c0618ad334ba105c5a2db"
+content-hash = "f329b5eefeeb0bb78fb89d690fefab385bc649580897c58c91741267bdf7b671"
 python-versions = "^3.8"
 
 [metadata.files]
