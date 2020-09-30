@@ -145,7 +145,7 @@ class GameLogger():
             round_count = 0  # Used for save interval
             while True:
                 try:
-                    message = self._await_commands(["ROUND STARTED"])  # Round started
+                    message = self._udp_client.await_commands(["ROUND STARTED"])  # Round started
                     idx = message.split(";")[1]
                     players = message.split(";")[2].split(",")
                     self._rounds.append(Round(idx, players))
@@ -159,25 +159,11 @@ class GameLogger():
                     self.close()
                     exit(0)
 
-    def _await_commands(self, cmds):
-        """
-        Waits for one of the given commands. Returns incoming message.
-
-        :param [] cmds: List of commands to wait for
-        :return str: Message
-        """
-        while True:
-            message = self._udp_client.await_message()
-            print(message)
-            start = message.split(";")[0]
-            if start in cmds:
-                return message
-
     def _listen_move(self):
         """
         Recursively listens to the game moves until round is finished.
         """
-        message = self._await_commands(["ANNOUNCED", "SCORE"])
+        message = self._udp_client.await_commands(["ANNOUNCED", "SCORE"])
         split = message.split(";")
         if split[0] == "SCORE":
             return
@@ -188,7 +174,7 @@ class GameLogger():
         move.set_announced(tuple([int(i) for i in split[2].split(",")]))
         self._current_player_counter = (self._current_player_counter + 1) % len(players)
 
-        message = self._await_commands(["ACTUAL DICE", "PLAYER ROLLS", "SCORE"])
+        message = self._udp_client.await_commands(["ACTUAL DICE", "PLAYER ROLLS", "SCORE"])
         split = message.split(";")
         cmd = split[0]
         if cmd == "SCORE":

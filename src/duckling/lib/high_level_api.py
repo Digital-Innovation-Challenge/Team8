@@ -7,7 +7,7 @@ from duckling.lib.udp import MaexchenUdpClient
 
 
 class MaexchenHighLevelBotAPI(object):
-    def __init__(self, bot_name=None, server_ip="35.159.50.117", server_port=9000, buffer_size=1024):
+    def __init__(self, bot_name=None, server_ip="35.159.50.117", server_port=9000, buffer_size=1024, max_message_timeout_count=5):
         """
         Creates a HighLevelBotAPI object.
 
@@ -16,6 +16,7 @@ class MaexchenHighLevelBotAPI(object):
         :param server_port: Port of the server.
         :param buffer_size: Size of the Buffer.
         """
+        self.max_message_timeout_count = max_message_timeout_count
         self._udp_client = MaexchenUdpClient()
 
         # Set or generate the bot name
@@ -41,7 +42,14 @@ class MaexchenHighLevelBotAPI(object):
         It joins the game on the next possibility.
         """
         print("--- Starting")
+        # Register
         self._udp_client.send_message(f"REGISTER;{self._bot_name}")
+        msg = self._udp_client.await_message()
+        if msg.startswith("REJECTED"):
+            raise MaexchenRegisterError("--- Connection rejected")
+        elif not msg.startswith("REGISTERED"):
+            raise MaexchenRegisterError(f"--- Connection not accepted. Got: '{message}'")
+
         self._stop_main = False
         self._main_thread = threading.Thread(target=self._main_loop, args=())
         self._main_thread.start()
@@ -63,7 +71,7 @@ class MaexchenHighLevelBotAPI(object):
         """
         print("--- Accusing")
         self._udp_client.send_message(f"SEE;{self._token}")
-        while True:
+        for message_timeout_count in range(self.max_message_timeout_count):
             message = self._udp_client.await_message()
             if message.startswith("PLAYER LOST;"):
                 print(message)
@@ -71,6 +79,7 @@ class MaexchenHighLevelBotAPI(object):
                     return True
                 if message.endswith("SEE_FAILED"):
                     return False
+        raise MaexchenTimeoutError("Timeout while accusing!")
 
     def roll(self):
         """
@@ -78,17 +87,19 @@ class MaexchenHighLevelBotAPI(object):
         """
         print("--- Rolling")
         self._udp_client.send_message(f"ROLL;{self._token}")
-        while True:
+
+        for message_timeout_count in range(self.max_message_timeout_count):
             message = self._udp_client.await_message()
             if message.startswith("ROLLED;"):
                 print(message)
                 self._token = message.split(";")[2]
                 dice = tuple([int(num) for num in message.split(";")[1].split(",")])
                 return dice
+        raise MaexchenTimeoutError("Timeout while waiting for ROLLED!")
 
     def announce(self, dice):
         """
-        Announses a dice roll or lie.
+        Announces a dice roll or lie.
         """
         print("--- Announcing " + str(dice))
         self._udp_client.send_message(f"ANNOUNCE;{dice[0]}, {dice[1]};{self._token}")
@@ -110,6 +121,8 @@ class MaexchenHighLevelBotAPI(object):
         self._main_thread.join()
         self._stop_main = False
         self._udp_client.send_message("UNREGISTER")
+        _ = self._udp_client.await_commands("UNREGISTERED")
+        print("--- Unregistered")
         self._udp_client.close()
 
     def _main_loop(self):
@@ -136,7 +149,20 @@ class MaexchenHighLevelBotAPI(object):
             if message.startswith("YOUR TURN"):
                 #print(message)
                 self._token = message.split(";")[1]
-                if self._gameplays:
-                    self._callback(self._gameplays[-1])
-                else:
-                    self._callback(None)
+                try:
+                    if self._gameplays:
+                        self._callback(self._gameplays[-1])
+                    else:
+                        self._callback(None)
+                except MaexchenTimeoutError as e:
+                    print("--- Skipped turn due to timeout error!")
+                    continue
+
+
+class MaexchenRegisterError(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+
+class MaexchenTimeoutError(Exception):
+    def __init__(self, message):
+        super().__init__(message)
