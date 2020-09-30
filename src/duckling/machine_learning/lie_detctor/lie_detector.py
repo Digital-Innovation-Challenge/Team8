@@ -7,6 +7,12 @@ from duckling.lib.tools import *
 
 class InferenceEngine(object):
     def __init__(self, model=None, version=0):
+        """
+        Executes the ML lie detector.
+
+        :param model: Name of the model
+        :param version: Version of the model architecture
+        """
         self.model_version = 0
         self._policy = None
         if model is not None:
@@ -14,11 +20,23 @@ class InferenceEngine(object):
             self.load_model(model_folder)
 
     def load_model(self, filename):
+        """
+        Explicitly loads a model file.
+        """
         print(f"Requested model {filename}\nLoading model...")
         with open(filename, "rb") as handle:
             self._policy = pickle.load(handle)
 
     def inference(self, data):
+        """
+        Executes the model on given data.
+        :param data: 
+            Version 0:
+                A dict containing the value tuples of the previous players name 'val' and 'val_pre'
+        :return: 
+            Version 0:
+                The lie estimation as a boolean
+        """
         if self.model_version == 0:
             # Generate and normalize classifyer inputs
 
