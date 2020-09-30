@@ -27,6 +27,20 @@ class MaexchenUdpClient:
 
         return data.decode('utf-8')
 
+    def await_commands(self, cmds):
+        """
+        Waits for one of the given commands. Returns incoming message.
+
+        :param [] cmds: List of commands to wait for
+        :return str: Message
+        """
+        while True:
+            message = self.await_message()
+            print(message)
+            start = message.split(";")[0]
+            if start in cmds:
+                return message
+
     def close(self):
         return self._socket.close()
 
