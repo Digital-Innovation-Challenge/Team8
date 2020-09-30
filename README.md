@@ -1,8 +1,28 @@
-# Digital Innovation Challenge 2020 - andrena objects ag 
+# Digital Innovation Challenge 2020 - Team Duckling 
+<!-- PROJECT LOGO -->
+<br />
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/62751653/94692773-3b6ac300-0333-11eb-97f3-e245963fea74.jpg" alt="Logo" width="240" height="240">
+<h3 align="center">Lecture2Gether</h3>
+  <p align="center">
+    Bots for the game "Mäxchen" aka Mia.
+    <br />
+    <br />
+    <a href="https://lecture2gether.eu">View Demo</a> <!--TODO DEMO VERLINKEN-->
+  </p>
+</p>
+
+## About the Project
+
+These are bots for the game "Mäxchen" (aka Mia) developed in the Digital Innovation Challenge 2020. We developed several bots including Machine learning approaches for the lie detection of other players and combining several winning strategies for the announcement of our current roll.
 
 ## The Game
 
 The rules for the game "Mäxchen" (aka Mia) are explained in Detail [here](https://en.wikipedia.org/wiki/Mia_(game)).
+
+## Install
+
+
 
 ## Technical Infrastructure
 The game runs on a remote server (IP: `35.159.50.117`, port: `9000`). 
