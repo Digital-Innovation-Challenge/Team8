@@ -82,8 +82,8 @@ params = {
     "activation": 'relu',
     "solver": 'sgd',
     "learning_rate": "constant",
-    "learning_rate_init": 0.0001,
-    "batch_size": 512,
+    "learning_rate_init": 0.001,
+    "batch_size": 8,
     "max_iter": 20000,
     "shuffle": True, 
     "random_state": 42, 
@@ -91,7 +91,7 @@ params = {
     "verbose": 1, 
     "early_stopping": True,
     "validation_fraction": 0.2, 
-    "n_iter_no_change": 200,
+    "n_iter_no_change": 100,
 }
 
 mlp = MLPClassifier(**params) # design your network
