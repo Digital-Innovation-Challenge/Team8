@@ -135,6 +135,23 @@ class AggressiveStrategy(AbstractStrategy):
         return tools.rank_to_value(rank)
 
 
+class ConservativeStrategy(AbstractStrategy):
+    def should_accuse_non_trivially(self, prev_turns):
+        if tools.higher_than((5, 4), prev_turns):
+            return False
+        return True
+
+    def announce_first_turn(self, our_roll):
+        return our_roll
+
+    def announce_later_turn(self, prev_turns, our_roll):
+        if tools.higher_than(our_roll, prev_turns[-1][1]):
+            announcement = our_roll
+        else:
+            announcement = tools.rank_to_value(tools.value_to_rank(prev_turns[-1][1]) + 1)
+        return announcement
+
+
 class BinomialDistributionMLStrategy(AbstractMLStrategy):
     def __init__(self, *args, **kwargs):
         super(BinomialDistributionMLStrategy, self).__init__(*args[1:], **kwargs)
