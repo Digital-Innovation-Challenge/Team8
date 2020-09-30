@@ -5,6 +5,4 @@
 __pycache__
 target/
 duckling.egg-info/
-model_*
-models/
 mia_*.yaml
