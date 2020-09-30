@@ -93,6 +93,14 @@ class MaexchenHighLevelBotAPI(object):
         print("--- Announcing " + str(dice))
         self._udp_client.send_message(f"JOIN;{dice[0]}, {dice[1]};{self._token}")
 
+    def get_announced(self):
+        """
+        Retuns a list of all recently announced gameplays.
+
+        :return: List of Tuples with the name and the value tuple.
+        """
+        return self._gameplays
+
     def close(self):
         """
         Closes the Bots connection.
