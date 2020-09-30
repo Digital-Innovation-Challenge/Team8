@@ -8,7 +8,7 @@
     Bots for the game "Mäxchen" aka Mia.
     <br />
     <br />
-    <a href="https://lecture2gether.eu">View Demo</a> <!--TODO DEMO VERLINKEN-->
+    <a href=https://streamable.com/elac1d>View Video</a> <!--TODO DEMO VERLINKEN-->
   </p>
 </p>
 
@@ -58,6 +58,18 @@ We also added some tools (TODO LINK) to listen to the game traffic, parse it and
 This resulted in huge datasets that we used for our machine learning approach.
 
 ## Bots
+
+#### Aggressive
+- Never accuse except when the previous bot announced 21
+- Always announce the maximum of 54, our roll, 
+### Weighted Distribution ML
+- Use machine learning to determine whether to accuse or not
+- If roll is higher than previous, say the truth
+- Else choose a random value higher than the previous roll weighted by their probability
+### Binomial Distribution ML
+- Use machine learning to determine whether to accuse or not
+- If roll is higher than previous, say the truth
+- Else choose a random value higher than the previous roll based on a binomial distribution
 
 
 ## Machine learning
