@@ -11,7 +11,7 @@ class ConservativeStrategyBot(TemplateBot):
     def __init__(self, *args, **kwargs):
         super(ConservativeStrategyBot, self).__init__(*args, **kwargs)
         
-        self._detector_ie = InferenceEngine("model_30_09_2020_13_58_23")
+        self._detector_ie = InferenceEngine("model_30_09_2020_15_54_02", version=1)
 
 
     # overridden
@@ -23,7 +23,8 @@ class ConservativeStrategyBot(TemplateBot):
 
         previous_plays = self.bot.get_announced()
         classifier_data = {
-            'val': previous_plays[-1][1]
+            'val': previous_plays[-1][1],
+            'position': len(previous_plays) + 1
         }
         if len(previous_plays) > 1:
             classifier_data['val_pre'] = previous_plays[-2][1]
