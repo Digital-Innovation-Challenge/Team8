@@ -2,6 +2,8 @@ import random
 
 import duckling.lib.tools as tools
 
+from src.duckling.machine_learning.lie_detctor.lie_detector import InferenceEngine
+
 
 class AbstractStrategy:
     """
@@ -39,6 +41,40 @@ class AbstractStrategy:
         :return: The roll we should announce as a 2-tuple
         """
         pass
+
+
+class AbstractMLStrategy(AbstractStrategy):
+    """
+    Implementation of AbstractStrategy using a given machine learning model
+    """
+
+    def __init__(self, model, version=0):
+        self._detector_ie = InferenceEngine(model, version=version)
+        self._version = version
+
+    # overridden
+    def should_accuse_non_trivially(self, prev_turns):
+        classifier_data = {
+            'val': prev_turns[-1][1]
+        }
+        if self._version == 1:
+            classifier_data['position'] = len(prev_turns) + 1
+        if len(prev_turns) > 1:
+            classifier_data['val_pre'] = prev_turns[-2][1]
+
+        print(classifier_data)
+
+        accuse = self._detector_ie.inference(classifier_data)
+        return accuse
+
+
+class MLStrategyFromOldStrategy(AbstractMLStrategy):
+    def __init__(self, old_strategy, model, version=0):
+        super(AbstractMLStrategy, self).__init__(model, version)
+        self.old_strategy = old_strategy
+
+    def announce(self, prev_turns, our_roll):
+        return self.old_strategy.announce(prev_turns, our_roll)
 
 
 class RandomStrategy(AbstractStrategy):
