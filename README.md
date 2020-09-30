@@ -8,7 +8,7 @@
     Bots for the game "Mäxchen" aka Mia.
     <br />
     <br />
-    <a href=https://streamable.com/elac1d>View Video</a> <!--TODO DEMO VERLINKEN-->
+    <a href="https://lecture2gether.eu">View Demo</a> <!--TODO DEMO VERLINKEN-->
   </p>
 </p>
 
@@ -31,20 +31,17 @@ cd Team8/src
 poetry install
 ```
 
-After that you are able to join the poetry shell by typing
+## Run
+
+You can run a bot via 
+```
+poetry run python3 duckling/bots/bot.py -h
+```
+
+You are also able to run our scipts in the poetry shell by typing
 ```
 poetry shell
 ```
-or you can run a specific command via
-```
-poetry run <command>
-```
-
-Such commands include
-
-- `python3 bla.py` to run the bla bot TODO
-- `python3 bla.py` to run the bla bot TODO
-
 
 ## Technical Infrastructure
 The game runs on a remote server (IP: `35.159.50.117`, port: `9000`). 
@@ -58,18 +55,6 @@ We also added some tools (TODO LINK) to listen to the game traffic, parse it and
 This resulted in huge datasets that we used for our machine learning approach.
 
 ## Bots
-
-#### Aggressive
-- Never accuse except when the previous bot announced 21
-- Always announce the maximum of 54, our roll, 
-### Weighted Distribution ML
-- Use machine learning to determine whether to accuse or not
-- If roll is higher than previous, say the truth
-- Else choose a random value higher than the previous roll weighted by their probability
-### Binomial Distribution ML
-- Use machine learning to determine whether to accuse or not
-- If roll is higher than previous, say the truth
-- Else choose a random value higher than the previous roll based on a binomial distribution
 
 
 ## Machine learning
