@@ -59,3 +59,13 @@ class RandomStrategy(AbstractStrategy):
             values_to_choose_from = all_values[index + 1:]
         announce_value = random.choice(values_to_choose_from)
         return announce_value
+
+
+class AggressiveStrategy(AbstractStrategy):
+    def should_accuse_non_trivially(self, prev_turns):
+        return False
+
+    def announce(self, prev_turns, our_roll):
+        prev_roll = prev_turns[-1][1]
+        rank = max(tools.value_to_rank((5, 4)), tools.value_to_rank(prev_roll) + 1, tools.value_to_rank(our_roll))
+        return tools.rank_to_value(rank)
