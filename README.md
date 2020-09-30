@@ -21,7 +21,29 @@ These are bots for the game "Mäxchen" (aka Mia) developed in the Digital Innova
 The rules for the game "Mäxchen" (aka Mia) are explained in Detail [here](https://en.wikipedia.org/wiki/Mia_(game)).
 
 ## Install
+You need the [Poetry](https://python-poetry.org/) package manager to install and run our code base.
 
+After you installed Poetry simply type the following commands to clone and install our code:
+
+```
+git clone https://github.com/Digital-Innovation-Challenge/Team8.git
+cd Team8/src
+poetry install
+```
+
+After that you are able to join the poetry shell by typing
+```
+poetry shell
+```
+or you can run a specific command via
+```
+poetry run <command>
+```
+
+Such commands include
+
+- `python3 bla.py` to run the bla bot
+- `python3 bla.py` to run the bla bot
 
 
 ## Technical Infrastructure
