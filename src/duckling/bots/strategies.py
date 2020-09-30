@@ -2,6 +2,7 @@ import random
 
 import duckling.lib.tools as tools
 from duckling.machine_learning.lie_detctor.lie_detector import InferenceEngine
+from numpy.random import binomial
 
 
 class AbstractStrategy:
@@ -132,3 +133,22 @@ class AggressiveStrategy(AbstractStrategy):
         prev_roll = prev_turns[-1][1]
         rank = max(tools.value_to_rank((5, 4)), tools.value_to_rank(prev_roll) + 1, tools.value_to_rank(our_roll))
         return tools.rank_to_value(rank)
+
+
+class BinomialDistributionMLStrategy(AbstractMLStrategy):
+    def __init__(self, *args, **kwargs):
+        super(BinomialDistributionMLStrategy, self).__init__(*args[1:], **kwargs)
+        self.p = args[0]
+
+    def announce_first_turn(self, our_roll):
+        return our_roll
+
+    def announce_later_turn(self, prev_turns, our_roll):
+        our_rank = tools.value_to_rank(our_roll)
+        prev_rank = tools.value_to_rank(prev_turns[-1][1])
+        if our_rank > prev_rank:
+            return our_roll
+        else:
+            n = 21 - prev_rank
+            top_by = binomial(n, self.p)
+            return tools.rank_to_value(prev_rank + top_by)
