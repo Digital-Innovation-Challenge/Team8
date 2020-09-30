@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+import sys
 import yaml
 import pickle
 import numpy as np
@@ -11,7 +13,7 @@ data = None
 X = [] 
 Y = [] 
 
-with open("/home/florian/Projekt/Team8/src/duckling/machine-learning/lie-detctor/mia_30-09-2020_01_26_21.yaml", 'r') as load_file:
+with open(sys.argv[1], 'r') as load_file:
     data = yaml.full_load(load_file)
 
 # Person -1
