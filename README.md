@@ -48,36 +48,17 @@ Such commands include
 
 ## Technical Infrastructure
 The game runs on a remote server (IP: `35.159.50.117`, port: `9000`). 
-The players communicate with the server using a simple text-based protocol over UDP (using UTF-8 encoded strings).
-You find a more detailed description of the messages sent between client and server [here](./protocol.md). 
+The players communicate with the server using text-based protocol over UDP (using UTF-8 encoded strings)
+We wrapped this protocoll to a high level python api.
 
-## How to join the game?
-To join the game, a bot must first register itself with a name. The name must not contain whitespaces, colons, 
-semicolons, or commas and can have up to 20 characters. From then on, the bot will receive server messages continuously and can respond to them. 
-The server will only accept answers within a narrow time frame (250 ms).
+We also introduced a object oriented hirachy which allowed us to combine multiple startegies and abstarct the server communication on multiple levels. 
+Allowing methods like our machine learing based lie detection.
 
-### Join with example bots
-We provide you with two very simple bots written in [Java](bots/java/README.md) and [Python](bots/README.md).
-How to fire up these bots is described in the respective README.mds. 
-Please note that the code of the example bots is not an example for clean code. 
-Hence, if you want to build upon it, you should better do some refactorings.
+We also added some tools (TODO LINK) to listen to the game traffic, parse it and save them in a strucktured format. 
+This resulted in huge datasets that we used for our machine learning approach.
 
-### Join with your own bot
-**Here comes the challenge:**
-Implement a bot that beats all the others.
-You are free to implement your bot using any language of your choice. 
-Happy coding!
-
-## How do I know if my bot beats the others?
-Every time a bot looses, all other bots earn one point.
-
-We provide you with an example [visualisation](http://andrena.maexchen.spectator.s3-website.eu-central-1.amazonaws.com/build/#/)
-of the average points per minute of every participating bot.
-
-Feel free to implement your own graphical representation of the player scores. 
-To do this you can register a client as spectator (see [here](./protocol.md)). 
-Spectators are not able to actively participate in the game. Yet they will receive all messages every other client would receive.
+## Bots
 
 
-## References
-The idea for this challenge as well as slightly modified code for the server is adapted from https://github.com/conradthukral/maexchen
+## Machine learning
+We
